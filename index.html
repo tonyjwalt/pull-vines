@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="_css/pullVines.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="_js/pullVines.js"></script>
+  </head>
+  <body>
+    <div id="twitter-feed"></div>
+    <script>
+    	$(function() {
+			$("#twitter-feed").getVines("tonyjwalt", 10, 200, 200);
+		});
+	</script>
+  </body>
+</html>
