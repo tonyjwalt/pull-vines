@@ -24,6 +24,8 @@ $term = (isset($_GET['term'])) ? $_GET['term'] : 'vine';
 if ( isset($_GET['searchType']) && $_GET['searchType'] == 'user' ) {
 	$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$term."&count=".$notweets);
 } else {
+	// This isn't parsing right. Need to examine this.
+	// echo json_encode ($tweets);
 	$tweets = $connection->get("https://api.twitter.com/1.1/search/tweets.json?q=".$term."&count=".$notweets);
 }
 
