@@ -3,11 +3,15 @@ session_start();
 require_once("twitteroauth-master/twitteroauth/twitteroauth.php"); //Path to twitteroauth library
  
 // Account Variables
-// May set up testing for a config file with "File Exist" that populates these variables, otherwise use these.
-$consumerkey = "123456";
-$consumersecret = "123456";
-$accesstoken = "123456";
-$accesstokensecret = "123456";
+$filename = 'keys.php';
+if (file_exists($filename)) {
+    include $filename; //I'm using this file to store my keys so they aren't put on github
+} else {
+    $consumerkey = "123456";
+	$consumersecret = "123456";
+	$accesstoken = "123456";
+	$accesstokensecret = "123456";
+}
 $connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
 
 //Passed Variables
