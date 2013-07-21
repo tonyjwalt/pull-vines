@@ -2,29 +2,30 @@
 session_start();
 require_once("twitteroauth-master/twitteroauth/twitteroauth.php"); //Path to twitteroauth library
  
-//Setup Connection Variables
+// Account Variables
+// May set up testing for a config file with "File Exist" that populates these variables, otherwise use these.
 $consumerkey = "123456";
 $consumersecret = "123456";
 $accesstoken = "123456";
 $accesstokensecret = "123456";
-$connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret); 
+$connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
 
 //Passed Variables
 $notweets = (isset($_GET['tweetNum'])) ? $_GET['tweetNum'] : 0;
-
-	
-if ( isset($_GET['username']) ) {
-	$twitteruser = $_GET['username'];
-	$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$twitteruser."&count=".$notweets);
+$cardWidth = (isset($_GET['cardWidth'])) ? $_GET['cardWidth'] : 300;
+$cardHeight = (isset($_GET['cardHeight'])) ? $_GET['cardHeight'] : 300;
+$term = (isset($_GET['term'])) ? $_GET['term'] : 'vine';
+ 
+//Get the Tweets	
+if ( isset($_GET['searchType']) && $_GET['searchType'] == 'user' ) {
+	$tweets = $connection->get("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=".$term."&count=".$notweets);
 } else {
-	$tweets = $connection->get("https://api.twitter.com/1.1/search/tweets.json?q=vine&count=".$notweets);
+	$tweets = $connection->get("https://api.twitter.com/1.1/search/tweets.json?q=".$term."&count=".$notweets);
 }
-
-//Get the Tweets
 
 //Parse the Tweets and Return the Vines
 $parser = new parseTweetData;
-echo $parser -> parseTweets($tweets);
+echo $parser -> parseTweets($tweets, $cardWidth, $cardHeight);
 
 
 // FUNCTIONS
@@ -35,7 +36,7 @@ function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oa
 
 //Class to parse the tweet data for vines and put them in a list
 class parseTweetData {
-	public function parseTweets($tweets) {
+	public function parseTweets($tweets, $cardWidth, $cardHeight) {
 		$vineUL = '<ul class="vine-list">';
 		$vines = 0;
 		foreach ($tweets as $tweet) {
@@ -46,7 +47,7 @@ class parseTweetData {
 				$match = '/vine.co/';
 				if ( preg_match($match, $url) ) {
 					$vines++;
-					$vineUL .= '<li><iframe src="'.$url.'/card" width="400" height="400"></iframe></li>';
+					$vineUL .= '<li><iframe src="'.$url.'/card" width="'.$cardWidth.'" height="'.$cardHeight.'"></iframe></li>';
 				}
 			}
 		}
